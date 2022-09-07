@@ -1,0 +1,22 @@
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.icon{
+    font-size: 1.5rem;
+    margin: 5px ;
+}
+
+.tag{
+  float: right;
+  padding: 0 1rem;
+  border-radius: 25px;
+  font-weight: 500;
+  background-color: rgb(191, 228, 247);
+}
+
+.copy-btn{
+  float:right;
+}
