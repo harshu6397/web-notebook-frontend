@@ -4,7 +4,7 @@ import NoteItem from '../NoteItem/NoteItem';
 import './Notes.css';
 
 
-const Notes = ({setNote}) => {
+const Notes = ({ setNote }) => {
     const context = useContext(noteContext);
     const { ref, notes, getNotes } = context;
     useEffect(() => {
@@ -12,7 +12,7 @@ const Notes = ({setNote}) => {
         // eslint-disable-next-line
     }, [])
 
-    const updateNote = (currentNote) =>{
+    const updateNote = (currentNote) => {
         ref.current.click();
         setNote(currentNote)
     }

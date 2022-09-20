@@ -19,26 +19,26 @@ const Login = () => {
         login(credentials.email, credentials.password).then((data) => {
             if (data.status) {
                 showAlert("You are logged in", "Success")
-                localStorage.setItem('auth-token', data.authToken)
+                localStorage.setItem('token', data.authToken)
                 navigate('/home');
             }
             else {
                 showAlert("Invalid Credentials", "Danger")
-                console.log("ERROR") 
             }
         })
     }
 
     return (
         <div className='login-signup-container' >
+            <h3 className='text-center'>Login to continue with Web Notebook</h3>
             <form onSubmit={handleSubmit} className="my-4">
                 <div className="form-group">
                     <label htmlFor="email">Email address</label>
-                    <input type="email" className="form-control" id="email" name='email' value={credentials.email} onChange={onchange} aria-describedby="emailHelp" placeholder="Enter email" />
+                    <input type="email" className="form-control" id="email" name='email' value={credentials.email} onChange={onchange} aria-describedby="emailHelp" placeholder="Enter email" required/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" id="password" name='password' value={credentials.password} onChange={onchange} placeholder="Enter password" />
+                    <input type="password" className="form-control" id="password" name='password' value={credentials.password} onChange={onchange} placeholder="Enter password" required minLength={8} />
                 </div>
                 <div className="btn-container" style={{ textAlign: "center" }}>
                     <button type="submit" className="btn btn-primary" style={{ padding: ' .7rem 4rem' }}>Login</button>

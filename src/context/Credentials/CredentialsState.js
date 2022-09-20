@@ -1,10 +1,16 @@
-import { useState} from 'react';
+import { useState, useEffect} from 'react';
 import CredentialsContext from './credentialsContext';
 
 const CredentialsState = (props) => {
     const [userData, setUserData] = useState({})
     const [token, setToken] = useState('')
     const host = "https://web-notebook-apis.herokuapp.com";
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token){
+            getUserData(token);
+        }
+    }, []);
 
     const login = async (email, password) => {
         const response = await fetch(`${host}/api/auth/login`, {
@@ -17,6 +23,7 @@ const CredentialsState = (props) => {
         const json = await response.json(); 
         getUserData(json.authToken);
         setToken(json.authToken);
+        localStorage.setItem('token', json.authToken);
         return json;
     }
 
@@ -29,7 +36,6 @@ const CredentialsState = (props) => {
             }
         });
         const json = await response.json();
-        console.log(json)
         setUserData(json);
         return json;
     }

@@ -15,25 +15,23 @@ const Signup = () => {
   }
 
   const handleSubmit = async (e) => {
-    console.log("On handle submit")
     e.preventDefault()
     const { name, email, password, cpassword } = credentials;
     signup(name, email, password, cpassword).then((data) => {
-      console.log(data)
       if (data.status) {
         showAlert("You are successfully registered!", "Success")
-        localStorage.setItem('auth-token', data.authToken)
+        localStorage.setItem('token', data.authToken)
         navigate('/')
       }
       else {
         showAlert(data['errors'][0]['msg'], "Danger")
-        console.log("ERROR")
       }
     })
   }
 
   return (
     <div className='login-signup-container' >
+      <h3 className='text-center'>Sign Up to use Web Notebook</h3>
       <form onSubmit={handleSubmit} className="my-4">
         <div className="form-group">
           <label htmlFor="name">Name</label>

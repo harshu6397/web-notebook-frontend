@@ -1,18 +1,16 @@
-import { useState, useRef, useContext} from 'react';
+import { useState, useRef} from 'react';
 import NoteContext from './noteContext';
-import credentialsContext from '../Credentials/credentialsContext';
 
 const NoteState = (props) => {
-    const {token} = useContext(credentialsContext);
-    const ref = useRef(null);
     const host = "https://web-notebook-apis.herokuapp.com";
+    const ref = useRef(null);
     const [notes, setNotes] = useState([]);
 
     // Search Notes
     const searchNotes = (searchText) => {
-        console.log(searchText)
         if(searchText.length < 1){
-            getNotes();
+            const token = localStorage.getItem('token');
+            getNotes(token);
         }
         else{
             let newNotes = notes.filter((note) => {
@@ -33,7 +31,7 @@ const NoteState = (props) => {
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': token
+                'auth-token': localStorage.getItem('token')
             }
         });
         const json = await response.json();
@@ -47,7 +45,7 @@ const NoteState = (props) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': token
+                'auth-token': localStorage.getItem('token')
             },
             body: JSON.stringify({title, description, tag})
         });
@@ -62,7 +60,7 @@ const NoteState = (props) => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': token
+                'auth-token': localStorage.getItem('token')
             }
         });
         await response.json();
@@ -80,7 +78,7 @@ const NoteState = (props) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': token
+                'auth-token': localStorage.getItem('token')
             },
             body: JSON.stringify({title, description, tag})
         });
