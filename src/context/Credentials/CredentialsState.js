@@ -4,7 +4,7 @@ import CredentialsContext from './credentialsContext';
 const CredentialsState = (props) => {
     const [userData, setUserData] = useState({})
     const [token, setToken] = useState('')
-    const host = "https://web-notebook-apis.herokuapp.com";
+    const host = "https://web-notebook-apis.onrender.com/";
     useEffect(() => {
         const token = localStorage.getItem('token');
         if(token){
