@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import alertContext from '../../context/Alert/alertContext';
 import credentialsContext from '../../context/Credentials/credentialsContext';
+import swal from 'sweetalert';
+
 
 const Signup = () => {
   let navigate = useNavigate();
-  const { showAlert } = useContext(alertContext);
   const { signup } = useContext(credentialsContext);
   const [credentials, setcredentials] = useState({ name: "", email: "", password: "", cpassword: "" })
+  const [loading, setLoading] = useState(false)
 
   const onchange = (e) => {
     setcredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -16,17 +17,30 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const { name, email, password, cpassword } = credentials;
-    signup(name, email, password, cpassword).then((data) => {
-      if (data.status) {
-        showAlert("You are successfully registered!", "Success")
-        localStorage.setItem('token', data.authToken)
-        navigate('/')
-      }
-      else {
-        showAlert(data['errors'][0]['msg'], "Danger")
-      }
-    })
+    const response = await signup(name, email, password, cpassword);
+    if (response.status) {
+      setLoading(false)
+      swal({
+        title: "Success",
+        text: "You are successfully registered!",
+        icon: "success",
+        button: "Ok"
+      }).then(() => {
+        localStorage.setItem('token', response.authToken)
+        navigate('/');
+      })
+    }
+    else {
+      setLoading(false)
+      swal({
+        title: "Error",
+        text: response['errors'][0]['msg'],
+        icon: "error",
+        button: "Ok",
+      })
+    }    
   }
 
   return (
@@ -51,7 +65,13 @@ const Signup = () => {
           <input type="password" className="form-control" id="cpassword" autoComplete="true" name='cpassword' value={credentials.cpassword} onChange={onchange} placeholder="Enter Confirm password" />
         </div>
         <div className="btn-container" style={{ textAlign: "center" }}>
-          <button type="submit" className="btn btn-primary" style={{ padding: ' .7rem 4rem' }}>Sign Up</button>
+          <button type="submit" className="btn btn-primary" style={{ padding: ' .7rem 4rem' }}>
+            {
+              loading ? <div class="spinner-border text-light" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div> : "Sign Up" 
+            } 
+            </button>
         </div>
       </form>
     </div>

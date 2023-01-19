@@ -1,14 +1,14 @@
 import './Login.css';
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import alertContext from '../../context/Alert/alertContext'
 import credentialsContext from '../../context/Credentials/credentialsContext';
+import swal from 'sweetalert';
 
 const Login = () => { 
     const navigate = useNavigate();
-    const { showAlert } = useContext(alertContext);
     const { login } = useContext(credentialsContext);
     const [credentials, setcredentials] = useState({ email: "", password: "" })
+    const [loading, setLoading] = useState(false)
 
     const onchange = (e) => {
         setcredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -16,16 +16,29 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        login(credentials.email, credentials.password).then((data) => {
-            if (data.status) {
-                showAlert("You are logged in", "Success")
-                localStorage.setItem('token', data.authToken)
+        setLoading(true)
+        const response = await login(credentials.email, credentials.password);
+        if (response.status) {
+            setLoading(false)
+            localStorage.setItem('token', response.authToken)
+            swal({
+                title: "Success",
+                text: "You are successfully logged in!",
+                icon: "success",
+                button: "Ok"
+            }).then(() => {
                 navigate('/home');
-            }
-            else {
-                showAlert("Invalid Credentials", "Danger")
-            }
-        })
+            })
+        }
+        else {
+            setLoading(false)
+            swal({
+                title: "Error",
+                text: "Invalid Credentials! Try Again",
+                icon: "error",
+                button: "Ok",
+            })
+        }
     }
 
     return (
@@ -41,7 +54,14 @@ const Login = () => {
                     <input type="password" className="form-control" id="password" name='password' value={credentials.password} onChange={onchange} placeholder="Enter password" required minLength={8} />
                 </div>
                 <div className="btn-container" style={{ textAlign: "center" }}>
-                    <button type="submit" className="btn btn-primary" style={{ padding: ' .7rem 4rem' }}>Login</button>
+                    <button type="submit" className="btn btn-primary" style={{ padding: ' .7rem 4rem' }}>
+                        {
+                            loading ? <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div> : "Login"
+
+                        }
+                    </button>
                 </div>
             </form>
         </div>

@@ -5,14 +5,13 @@ import user from './icons8-user-100.png';
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import noteContext from '../../context/notes/noteContext';
-import alertContext from '../../context/Alert/alertContext';
 import credentialsContext from '../../context/Credentials/credentialsContext';
+import swal from 'sweetalert';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { searchNotes } = useContext(noteContext);
-  const { showAlert } = useContext(alertContext);
   const { userData } = useContext(credentialsContext);
 
   const handleInput = (e) => {
@@ -22,7 +21,12 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
-    showAlert("Logout Successfully!", "Success")
+    swal({
+      title: "Success",
+      text: "Logout Successfully!",
+      icon: "success",
+      button: "Ok"
+    })
   }
   
   return (

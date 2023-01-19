@@ -1,22 +1,24 @@
 import React, { useContext, useState } from "react";
 import noteContext from "../../context/notes/noteContext";
-import alertContext from "../../context/Alert/alertContext";
 import AddNote from "../AddNote/AddNote";
 import Notes from "../Notes/Notes";
 import "./Home.css";
+import swal from "sweetalert";
 
 const Home = () => {
   const context1 = useContext(noteContext);
-  const context2 = useContext(alertContext);
   const { ref, editNote } = context1;
-  const { showAlert } = context2;
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
 
     const handleClick = () => {
       editNote(note._id, note.title, note.description, note.tag);
         setNote({ title: "", description: "", tag: "" });
-        showAlert("Note Updated Successfully", "success");
-
+        swal({
+            title: "Success",
+            text: "Note Updated Successfully",
+            icon: "success",
+            button: "Ok"
+        })
     }
 
     const onChange = (e) => {

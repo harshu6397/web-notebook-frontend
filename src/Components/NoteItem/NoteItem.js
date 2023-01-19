@@ -1,18 +1,21 @@
 import React, { useContext, useState } from 'react'
 import './NoteItem.css';
 import noteContext from "../../context/notes/noteContext";
-import alertContext from '../../context/Alert/alertContext';
+import swal from 'sweetalert';
 
 const NoteItem = ({ note, updateNote }) => {
     const [copied, setCopied] = useState(false);
     const context1 = useContext(noteContext);
-    const context2 = useContext(alertContext);
     const { deleteNote } = context1;
-    const { showAlert } = context2;
 
     const handleClick = () => {
         deleteNote(note._id);
-        showAlert("Note Deleted Successfully", "success");
+        swal({
+            title: "Success",
+            text: "Note Deleted Successfully",
+            icon: "success",
+            button: "Ok"
+        })
     }
 
     const handleCopy = () => {
